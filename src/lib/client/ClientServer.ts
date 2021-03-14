@@ -44,7 +44,7 @@ class ClientServer extends ClientServerModel {
         return new Promise(async (resolve, reject) => {
             try {
                 let res = await this.api.call(`/client/servers/${this.identifier}/utilization`);
-                resolve({ used: res.data.attributes.cpu.current, total: res.data.attributes.cpu.limit });
+                resolve({ used: res.data.attributes.cpu_absolute, total: res.data.attributes.cpu.limit });
             } catch (error) {
                 reject(error);
             }
@@ -65,8 +65,8 @@ class ClientServer extends ClientServerModel {
     public memoryUsage(): Promise<UtilizationData> {
         return new Promise(async (resolve, reject) => {
             try {
-                let res = await this.api.call(`/client/servers/${this.identifier}/utilization`);
-                resolve({ used: res.data.attributes.memory.current, total: res.data.attributes.memory.limit });
+                let res = await this.api.call(`/client/servers/${this.identifier}/resources`);
+                resolve({ used: res.data.attributes.memory_bytes, total: res.data.attributes.memory.limit });
             } catch (error) {
                 reject(error);
             }
@@ -76,8 +76,8 @@ class ClientServer extends ClientServerModel {
     public powerState(): Promise<string> {
         return new Promise(async (resolve, reject) => {
             try {
-                let res = await this.api.call(`/client/servers/${this.identifier}/utilization`);
-                resolve(res.data.attributes.state);
+                let res = await this.api.call(`/client/servers/${this.identifier}/resources`);
+                resolve(res.data.attributes.current_state);
             } catch (error) {
                 reject(error);
             }
